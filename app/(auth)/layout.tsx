@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { AbarrotiaLogo } from "@/components/composed/layouts/abarrotia-logo";
-import { CurrentYear } from "@/components/composed/layouts/current-year";
+import { CurrentYearLabel } from "@/components/composed/layouts/current-year-label";
 
 export default function AuthLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -12,7 +12,7 @@ export default function AuthLayout({ children }: Readonly<{ children: React.Reac
         </Link>
         {children}
         <span className="text-center text-xs text-muted-foreground">
-          <CurrentYear /> Abarrotia. Todos los derechos reservados.
+          <CurrentYearLabel /> Abarrotia. Todos los derechos reservados.
         </span>
       </main>
     </div>
