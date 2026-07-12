@@ -145,6 +145,10 @@ entry at `app/globals.css`, base color `neutral`. Aliases: `@/components`, `@/co
   `layouts/` for `AppSidebar`, `AbarrotiaLogo`, nav components; `forms/` for shared form building blocks
   like `SubmitButton`). Prefer composing from here before reaching for `ui/` primitives directly in a
   feature component.
+- **Naming**: files under `components/composed/` follow `{contexto}-{tipo}.{ext}`, e.g. `app-sidebar.tsx`,
+  `main-nav.tsx`, `abarrotia-logo.tsx`, `submit-button.tsx`. `{tipo}` must be the UI-element category the
+  component renders (`sidebar`, `nav`, `logo`, `button`, `card`, `modal`, etc.) — never the data/content it
+  displays. The exported component name is the PascalCase of the filename (`AppSidebar`, `SubmitButton`).
 - `hooks/` — app-wide hooks not tied to a single feature (e.g. `use-mobile.ts`). Feature-specific hooks
   belong in `features/<feature>/hooks/` instead.
 
