@@ -9,13 +9,6 @@ Next.js 16 (App Router), React 19, TypeScript, Tailwind v4, Drizzle ORM + Postgr
 Resend for transactional email. UI copy, error messages, and some code comments are written in Spanish
 (the target market); keep new user-facing strings in Spanish unless told otherwise.
 
-Product scope is currently a single-store MVP — not multi-tenant. better-auth's `organization` plugin is
-wired in at the auth layer (see below) but isn't exposed as a multi-store feature yet.
-
-This is an early-stage scaffold — most routes currently render placeholder content; `features/auth` (sign
-in) is the most complete feature end-to-end and is the reference implementation for the pattern described
-below.
-
 ## Commands
 
 Package manager is `pnpm`.
@@ -52,11 +45,33 @@ The `abarrotia-data` volume is declared `external: true`, so it must exist befor
 
 `app/` holds only routing: each `page.tsx` is a thin wrapper that imports and renders a page component
 from `features/<feature>/pages/<feature>-page.tsx`. Route groups map to feature folders, e.g.
-`app/(admin)/checkout/page.tsx` → `features/checkout/pages/checkout-page.tsx`,
-`app/(auth)/sign-in/page.tsx` → `features/auth/pages/sign-in-page.tsx`. When adding a route, create the
-feature component under `features/<feature>/` and keep the `app/` file a plain re-export/render.
+`app/(dashboard)/checkout/page.tsx` → `features/checkout/pages/checkout-page.tsx`,
+`app/(auth)/sign-in/page.tsx` → `features/auth/pages/sign-in-page.tsx`. `(dashboard)` wraps authenticated
+routes with the sidebar layout (`components/composed/layouts/app-sidebar.tsx`); `(auth)` wraps the
+centered auth-card layout. When adding a route, create the feature component under `features/<feature>/`
+and keep the `app/` file a plain re-export/render.
 
 Path alias `@/*` maps to the repo root (see `tsconfig.json`).
+
+### Feature-layer pattern (`features/<feature>/`)
+
+`features/auth` is the reference implementation; mirror its subfolders as a feature grows rather than
+inventing new ones:
+
+- `schemas/` — zod schemas + inferred types for form/input validation (e.g. `signInSchema`, `SignIn`).
+- `services/` — a class instance (e.g. `authService`) exported as a singleton, calling out to better-auth /
+  the DB and returning `Result<E, S>` (see `lib/errors/`) — never throws for expected failures.
+- `errors/` — feature-scoped error reasons (`*-error.ts`, a `satisfies Record<Reason, string>` message map
+  in `messages.ts`, Spanish text), plus a mapper (`map-api-error.ts`) translating library-specific errors
+  (e.g. `better-auth`'s `APIError` codes) into the feature's own reason type.
+- `actions/` — `"use server"` functions that parse input with the zod schema, call the service, and return
+  `ActionResult<T>` (`lib/errors/action-result.ts`): `{ success: true, data }` or `{ success: false,
+reason, message, fieldErrors? }`. This is the boundary between server logic and client components.
+- `hooks/` — client hooks (e.g. `useSignIn`) wiring `react-hook-form` + `zodResolver` to the schema, calling
+  the action on submit, and reporting the result via `appToast` (`lib/toast.ts`).
+- `components/` — feature-specific presentational/form components.
+- `pages/` — the top-level component rendered by the matching `app/` route.
+- `types/` — cross-cutting interfaces for the feature (e.g. repository contracts) not tied to a schema.
 
 ### Database (`db/`)
 
@@ -88,15 +103,17 @@ so the proxy would keep redirecting to itself). Add any new public/unauthenticat
 
 ### Errors (`lib/errors/`)
 
-Two-channel error handling:
+Two-channel error handling. Expected business-error _types_ now live per-feature (see
+`features/<feature>/errors/` above) rather than as one shared `DomainError`; `lib/errors/` only holds the
+generic plumbing:
 
-- **`DomainError`** (`errors.ts`) — expected business errors, carries a `PublicErrorCode` from `codes.ts`
-  (`PUBLIC_ERRORS`, Spanish user-facing messages). Return these via the `Result` tuple, never throw.
-- **`InfraError`** — unexpected infrastructure failures, tagged by `source: "DB" | "EMAIL" | "HTTP"`. Throw
-  these; don't route them through `Result`.
 - **`Result<E, S>`** (`result.ts`) — `[error, null] | [null, success]` tuple with `ok()`/`err()` helpers.
-  Functions that can fail with an expected `DomainError` should return `Result`, forcing callers to check
-  the error branch before touching the value.
+  `E` must have a `reason: string`. Services return this; never throw for expected failures.
+- **`ActionResult<T>`** (`action-result.ts`) — the shape `"use server"` actions return to client code:
+  `{ success: true, data }` or `{ success: false, reason, message, fieldErrors? }`. `fieldErrors` carries
+  zod's `flattenError(...).fieldErrors` when the failure is validation.
+- **`InfraError`** (`errors.ts`) — unexpected infrastructure failures, tagged by
+  `source: "DB" | "EMAIL" | "HTTP"`. Throw these; don't route them through `Result`.
 
 ### Email (`lib/email/`)
 
@@ -107,11 +124,29 @@ Provider abstraction: `EmailProvider` interface (`email.types.ts`) is implemente
 is exported as `emailService` from `lib/email/index.ts` — import that rather than constructing the
 service directly.
 
+### Other `lib/` utilities
+
+- `lib/session.ts` — `getCurrentSession()`, a thin wrapper over `auth.api.getSession({ headers })` for use
+  in server components/actions.
+- `lib/toast.ts` — `appToast` (`sonner` wrapper) with `success`/`error`/`info`/`warning` plus an
+  `action(result)` helper that toasts based on an `ActionResult`-shaped `{ success, message }`; feature
+  hooks call this after an action returns (see `useSignIn` above) instead of calling `sonner` directly.
+- `lib/resend.ts` — the raw `Resend` client instance; prefer `emailService` (`lib/email/`) over importing
+  this directly.
+
 ### UI
 
 shadcn/ui is configured via `components.json`: `base-luma` style, `remixicon` icon library, Tailwind v4
 entry at `app/globals.css`, base color `neutral`. Aliases: `@/components`, `@/components/ui`, `@/lib`,
 `@/hooks`. `next.config.ts` has `typedRoutes` and `reactCompiler` enabled.
+
+- `components/ui/` — shadcn-generated primitives; don't hand-edit formatting here (excluded from oxfmt).
+- `components/composed/` — hand-written components built from `ui/` primitives, grouped by concern (e.g.
+  `layouts/` for `AppSidebar`, `AbarrotiaLogo`, nav components; `forms/` for shared form building blocks
+  like `SubmitButton`). Prefer composing from here before reaching for `ui/` primitives directly in a
+  feature component.
+- `hooks/` — app-wide hooks not tied to a single feature (e.g. `use-mobile.ts`). Feature-specific hooks
+  belong in `features/<feature>/hooks/` instead.
 
 ## Tooling conventions
 
