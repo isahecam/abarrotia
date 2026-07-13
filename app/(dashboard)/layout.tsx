@@ -1,4 +1,5 @@
 import { AppSidebar } from "@/components/composed/layouts/app-sidebar";
+import { CurrentDateLabel } from "@/components/composed/layouts/current-date-label";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
@@ -16,6 +17,7 @@ export default function AdminLayout({
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
           </div>
+          <CurrentDateLabel className="ml-auto" />
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           <div className="min-h-screen flex-1 rounded-xl bg-muted/50 md:min-h-min">{children}</div>
