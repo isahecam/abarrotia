@@ -12,10 +12,7 @@ export function CurrentDateLabel({ ...props }: Readonly<HTMLAttributes<HTMLTimeE
   const isoDate = getIsoDate(now);
 
   return (
-    <time
-      {...props}
-      dateTime={isoDate}
-      className={cn("px-4 text-sm font-medium text-muted-foreground", props.className)}>
+    <time {...props} dateTime={isoDate} className={cn("text-sm font-medium text-muted-foreground", props.className)}>
       {date}
     </time>
   );
