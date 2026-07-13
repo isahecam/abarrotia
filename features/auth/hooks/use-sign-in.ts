@@ -29,8 +29,8 @@ export const useSignIn = () => {
       return;
     }
 
-    router.replace("/checkout");
     router.refresh();
+    router.replace("/checkout");
   };
 
   return { control, handleSubmit, onSubmit, isSubmitting };
