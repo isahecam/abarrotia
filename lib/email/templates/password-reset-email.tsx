@@ -29,10 +29,12 @@ export default function PasswordResetEmail({ name, resetUrl, tokenExpiresIn }: R
   return (
     <Tailwind>
       <Html>
-        <Head />
+        <Head>
+          <title>Restablece tu contraseña</title>
+        </Head>
         <Body className="bg-white font-sans">
           <Preview>Restablece tu contraseña</Preview>
-          <Container className="bg-[url('/static/raycast-bg.png')] p-8">
+          <Container className="border border-solid border-gray-200 bg-white p-8">
             <Heading className="mt-12 text-[28px] font-bold">Restablece tu contraseña para acceder a tu cuenta</Heading>
 
             <Text className="mt-4 text-sm">
@@ -43,7 +45,7 @@ export default function PasswordResetEmail({ name, resetUrl, tokenExpiresIn }: R
             <Section>
               <Button
                 href={resetUrl}
-                className="cursor-pointer rounded-full bg-emerald-700 px-6 py-3 text-center font-semibold text-emerald-50 no-underline">
+                className="btn-reset-password rounded-md bg-emerald-700 px-6 py-3 text-center font-semibold text-emerald-50 no-underline">
                 Restablecer contraseña
               </Button>
               <Text className="text-sm text-gray-500">
@@ -58,8 +60,8 @@ export default function PasswordResetEmail({ name, resetUrl, tokenExpiresIn }: R
             </Text>
 
             <Text className="text-sm">
-              <Link href={resetUrl} className="break-all text-emerald-700 underline">
-                {resetUrl}
+              <Link href={resetUrl} className="wrap-break-word text-emerald-700 underline">
+                resetUrl
               </Link>
             </Text>
 
