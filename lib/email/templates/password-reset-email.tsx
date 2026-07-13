@@ -61,7 +61,7 @@ export default function PasswordResetEmail({ name, resetUrl, tokenExpiresIn }: R
 
             <Text className="text-sm">
               <Link href={resetUrl} className="wrap-break-word text-emerald-700 underline">
-                resetUrl
+                {resetUrl}
               </Link>
             </Text>
 
