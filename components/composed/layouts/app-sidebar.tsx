@@ -1,6 +1,3 @@
-"use client";
-
-import { IconCash, IconChartBar, IconPackage, IconPackages, IconReceipt, IconSettings } from "@tabler/icons-react";
 import Link from "next/link";
 import * as React from "react";
 
@@ -17,46 +14,11 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { UserNav } from "@/features/profile/components/user-nav";
+import { getCurrentSession } from "@/lib/session";
 
-const data = {
-  navMain: [
-    {
-      title: "Cobro",
-      url: "/checkout",
-      icon: IconCash,
-    },
-    {
-      title: "Productos",
-      url: "/products",
-      icon: IconPackage,
-    },
-    {
-      title: "Inventario",
-      url: "#",
-      icon: IconPackages,
-    },
-    {
-      title: "Ventas",
-      url: "#",
-      icon: IconChartBar,
-    },
-    {
-      title: "Corte de caja",
-      url: "#",
-      icon: IconReceipt,
-    },
-  ],
+export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const session = await getCurrentSession();
 
-  navSecondary: [
-    {
-      title: "Ajustes",
-      url: "/settings",
-      icon: IconSettings,
-    },
-  ],
-};
-
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" variant="inset" {...props}>
       <SidebarHeader>
@@ -74,11 +36,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <MainNav items={data.navMain} />
-        <SecondaryNav items={data.navSecondary} className="mt-auto" />
+        <MainNav />
+        <SecondaryNav className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <UserNav />
+        <UserNav user={session?.user} />
       </SidebarFooter>
     </Sidebar>
   );
