@@ -19,35 +19,38 @@ import { getYear } from "@/utils/format-date";
 
 interface Props {
   name: string;
-  verificationUrl: string;
+  resetUrl: string;
   tokenExpiresIn: string;
 }
 
-export default function VerificationEmail({ name, verificationUrl, tokenExpiresIn }: Readonly<Props>) {
+export default function PasswordResetEmail({ name, resetUrl, tokenExpiresIn }: Readonly<Props>) {
   const currentYear = getYear(new Date());
 
   return (
     <Tailwind>
       <Html>
         <Head>
-          <title>Bienvenido a Abarrotia, Tu Punto de Venta</title>
+          <title>Restablece tu contraseña</title>
         </Head>
         <Body className="bg-white font-sans">
-          <Preview>Bienvenido a Abarrotia, Tu Punto de Venta</Preview>
+          <Preview>Restablece tu contraseña</Preview>
           <Container className="border border-solid border-gray-200 bg-white p-8">
-            <Heading className="mt-12 text-[28px] font-bold">Verifica tu correo para activar tu cuenta</Heading>
+            <Heading className="mt-12 text-[28px] font-bold">Restablece tu contraseña para acceder a tu cuenta</Heading>
 
             <Text className="mt-4 text-sm">
-              Hola {name}, gracias por unirte a Abarrotia. Haz clic en el botón de abajo para verificar tu cuenta.
+              Hola {name}, hemos recibido una solicitud para restablecer la contraseña de tu cuenta de Abarrotia. Haz
+              clic en el botón de abajo para continuar con el proceso.
             </Text>
 
             <Section>
               <Button
-                href={verificationUrl}
-                className="cursor-pointer rounded-full bg-emerald-700 px-6 py-3 text-center font-semibold text-emerald-50 no-underline">
-                Verificar cuenta
+                href={resetUrl}
+                className="btn-reset-password rounded-md bg-emerald-700 px-6 py-3 text-center font-semibold text-emerald-50 no-underline">
+                Restablecer contraseña
               </Button>
-              <Text className="text-sm text-gray-500">Si no creaste una cuenta, ignora este correo electrónico.</Text>
+              <Text className="text-sm text-gray-500">
+                Si no solicitaste esto, por favor ignora este correo electrónico.
+              </Text>
             </Section>
 
             <Hr className="border-gray-400" />
@@ -57,8 +60,8 @@ export default function VerificationEmail({ name, verificationUrl, tokenExpiresI
             </Text>
 
             <Text className="text-sm">
-              <Link href={verificationUrl} className="break-all text-emerald-700 underline">
-                {verificationUrl}
+              <Link href={resetUrl} className="wrap-break-word text-emerald-700 underline">
+                {resetUrl}
               </Link>
             </Text>
 
@@ -81,8 +84,8 @@ export default function VerificationEmail({ name, verificationUrl, tokenExpiresI
   );
 }
 
-export async function renderVerificationEmailText(props: Props) {
-  const html = await render(<VerificationEmail {...props} />);
+export async function renderPasswordResetEmailText(props: Props) {
+  const html = await render(<PasswordResetEmail {...props} />);
   const text = toPlainText(html);
   return { text };
 }
