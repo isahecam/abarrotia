@@ -8,4 +8,8 @@ const getYear = (date: Date | string, locale: string = "es-MX") => {
   return yearFormatter(locale).format(new Date(date));
 };
 
-export { getFullDate, getYear };
+const getIsoDate = (date: Date | string) => {
+  return new Date(date).toISOString().split("T")[0];
+};
+
+export { getFullDate, getIsoDate, getYear };
