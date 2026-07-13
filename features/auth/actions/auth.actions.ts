@@ -29,3 +29,16 @@ export async function signIn(input: SignIn): Promise<ActionResult> {
 
   return { success: true, data: undefined };
 }
+
+export async function signOut(): Promise<ActionResult> {
+  const [error] = await authService.signOut();
+
+  if (error)
+    return {
+      success: false,
+      reason: error.reason,
+      message: AUTH_ERROR_MESSAGES[error.reason],
+    };
+
+  return { success: true, data: undefined };
+}

@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { useSignOut } from "@/features/auth/hooks/use-sign-out";
 
 export function UserNav({
   user,
@@ -21,6 +22,8 @@ export function UserNav({
     avatar: string;
   };
 }>) {
+  const { onSignOut, isPending } = useSignOut();
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -44,7 +47,9 @@ export function UserNav({
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuGroup>
-              <DropdownMenuItem>Cerrar sesión</DropdownMenuItem>
+              <DropdownMenuItem onClick={onSignOut} disabled={isPending}>
+                Cerrar sesión
+              </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>

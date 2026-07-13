@@ -26,6 +26,20 @@ class AuthService {
       return err({ reason: "UNEXPECTED_ERROR" as const });
     }
   }
+
+  async signOut(): Promise<Result<AuthError, void>> {
+    try {
+      await auth.api.signOut({
+        headers: await headers(),
+      });
+      return ok(undefined);
+    } catch (error) {
+      if (error instanceof APIError) {
+        return err(mapBetterAuthError(error));
+      }
+      return err({ reason: "UNEXPECTED_ERROR" as const });
+    }
+  }
 }
 
 export const authService = new AuthService();
