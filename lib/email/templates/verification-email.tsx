@@ -29,10 +29,12 @@ export default function VerificationEmail({ name, verificationUrl, tokenExpiresI
   return (
     <Tailwind>
       <Html>
-        <Head />
+        <Head>
+          <title>Bienvenido a Abarrotia, Tu Punto de Venta</title>
+        </Head>
         <Body className="bg-white font-sans">
           <Preview>Bienvenido a Abarrotia, Tu Punto de Venta</Preview>
-          <Container className="bg-[url('/static/raycast-bg.png')] p-8">
+          <Container className="border border-solid border-gray-200 bg-white p-8">
             <Heading className="mt-12 text-[28px] font-bold">Verifica tu correo para activar tu cuenta</Heading>
 
             <Text className="mt-4 text-sm">
@@ -51,7 +53,7 @@ export default function VerificationEmail({ name, verificationUrl, tokenExpiresI
             <Hr className="border-gray-400" />
 
             <Text className="text-sm">
-              Si tienes problemas para hacer clic en el botón, copia y pega el siguiente enlace en tu navegador:{" "}
+              Si tienes problemas para hacer clic en el botón, copia y pega el siguiente enlace en tu navegador:
             </Text>
 
             <Text className="text-sm">
