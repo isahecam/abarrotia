@@ -19,11 +19,6 @@ import {
 import { UserNav } from "@/features/profile/components/user-nav";
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Cobro",
@@ -83,7 +78,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SecondaryNav items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <UserNav user={data.user} />
+        <UserNav />
       </SidebarFooter>
     </Sidebar>
   );
