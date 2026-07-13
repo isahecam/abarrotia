@@ -1,19 +1,21 @@
 import {
-  Html,
-  Button,
-  Head,
-  Preview,
-  Hr,
-  Tailwind,
-  Container,
-  Section,
   Body,
+  Button,
+  Container,
+  Head,
   Heading,
+  Hr,
+  Html,
+  Link,
+  Preview,
+  Section,
+  Tailwind,
   Text,
-  Img,
-  toPlainText,
   render,
+  toPlainText,
 } from "react-email";
+
+import { getYear } from "@/utils/format-date";
 
 interface Props {
   name: string;
@@ -21,54 +23,59 @@ interface Props {
   tokenExpiresIn: string;
 }
 
-export function VerificationEmail({ name, verificationUrl, tokenExpiresIn }: Readonly<Props>) {
-  const currentYear = new Date().getFullYear();
+export default function VerificationEmail({ name, verificationUrl, tokenExpiresIn }: Readonly<Props>) {
+  const currentYear = getYear(new Date());
 
   return (
-    <Html lang="es">
-      <Head>
-        <title>Bienvenido a Abarrotia, Tu Punto de Venta</title>
-      </Head>
-      <Preview>Verifica tu cuenta para comenzar a usar Abarrotia</Preview>
+    <Tailwind>
+      <Html>
+        <Head />
+        <Body className="bg-white font-sans">
+          <Preview>Bienvenido a Abarrotia, Tu Punto de Venta</Preview>
+          <Container className="bg-[url('/static/raycast-bg.png')] p-8">
+            <Heading className="mt-12 text-[28px] font-bold">Verifica tu correo para activar tu cuenta</Heading>
 
-      <Tailwind>
-        <Body className="bg-gray-100 font-sans">
-          <Container className="mx-auto my-8 max-w-150 rounded-lg bg-white">
-            <Section className="p-8 text-center">
-              <Img
-                src="https://valentines-day-app.vercel.app/liebe-verbindet.webp"
-                alt="Abarrotia"
-                width={120}
-                className="mx-auto aspect-auto object-contain"
-              />
+            <Text className="mt-4 text-sm">
+              Hola {name}, gracias por unirte a Abarrotia. Haz clic en el botón de abajo para verificar tu cuenta.
+            </Text>
+
+            <Section>
+              <Button
+                href={verificationUrl}
+                className="cursor-pointer rounded-full bg-emerald-700 px-6 py-3 text-center font-semibold text-emerald-50 no-underline">
+                Verificar cuenta
+              </Button>
+              <Text className="text-sm text-gray-500">Si no creaste una cuenta, ignora este correo electrónico.</Text>
             </Section>
 
-            <Section className="px-8 pb-8">
-              <Heading className="mb-4 text-2xl font-bold text-gray-900">Verifica tu cuenta</Heading>
+            <Hr className="border-gray-400" />
 
-              <Text className="mb-6 text-base leading-6 text-gray-600">
-                Hola {name}, gracias por ser parte de Abarrotia. Haz clic en el enlace de abajo para verificar tu
-                cuenta.
-              </Text>
+            <Text className="text-sm">
+              Si tienes problemas para hacer clic en el botón, copia y pega el siguiente enlace en tu navegador:{" "}
+            </Text>
 
-              <Section className="my-8 text-center">
-                <Button href={verificationUrl} className="rounded-md bg-blue-600 px-6 py-3 font-semibold text-white">
-                  Verificar cuenta
-                </Button>
-                <Text className="text-sm text-gray-400">El enlace expirará en {tokenExpiresIn}.</Text>
-              </Section>
-            </Section>
+            <Text className="text-sm">
+              <Link href={verificationUrl} className="break-all text-emerald-700 underline">
+                {verificationUrl}
+              </Link>
+            </Text>
 
-            <Hr className="my-4 border-gray-200" />
+            <Text className="mt-6 text-sm text-gray-500">
+              Este enlace expirará en <strong className="font-bold">{tokenExpiresIn}</strong>.
+            </Text>
 
-            <Section className="px-8 pb-8 text-center">
-              <Text className="text-sm text-gray-400">Si no creaste una cuenta, ignora este mensaje.</Text>
-              <Text className="text-xs text-gray-400">©{currentYear} Abarrotia</Text>
+            <Text className="text-sm text-gray-500 italic">El equipo de Abarrotia</Text>
+
+            <Hr className="mt-12 border-gray-400" />
+
+            <Section className="text-center">
+              <Text className="m-0 text-xs text-gray-500">{currentYear} Abarrotia, Tu Punto de Venta</Text>
+              <Text className="m-0 text-xs leading-6 text-gray-500">Rafael Lara Grajales, Puebla</Text>
             </Section>
           </Container>
         </Body>
-      </Tailwind>
-    </Html>
+      </Html>
+    </Tailwind>
   );
 }
 
