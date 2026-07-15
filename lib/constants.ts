@@ -1,6 +1,7 @@
 import {
   Icon,
   IconCash,
+  IconCategory,
   IconChartBar,
   IconPackage,
   IconPackages,
@@ -18,6 +19,7 @@ type NavItem = {
 const MAIN_NAV_ITEMS: NavItem[] = [
   { title: "Cobro", url: "/checkout", icon: IconCash },
   { title: "Productos", url: "#", icon: IconPackage },
+  { title: "Categorías", url: "/categories", icon: IconCategory },
   { title: "Inventario", url: "#", icon: IconPackages },
   { title: "Ventas", url: "#", icon: IconChartBar },
   { title: "Corte de caja", url: "#", icon: IconReceipt },
