@@ -12,7 +12,7 @@
     "fmt:check": "oxfmt --check",
     "prepare": "husky",
     "commitlint": "commitlint --edit",
-    "db:seed": "tsx ./db/seeds/owner-seed.ts",
+    "db:seed": "tsx --env-file=.env.development ./db/seeds/owner-seed.ts",
     "email": "email dev --dir ./lib/email/templates"
   },
   "dependencies": {
