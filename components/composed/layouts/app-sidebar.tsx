@@ -9,7 +9,12 @@ import { getOrganizations } from "@/lib/organization";
 import { getCurrentSession } from "@/lib/session";
 
 export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [session, organizations] = await Promise.all([getCurrentSession(), getOrganizations()]);
+  const [sessionResult, organizationsResult] = await Promise.allSettled([getCurrentSession(), getOrganizations()]);
+
+  // AppSidebar renders on every dashboard route with no error boundary above it, so each
+  // call is settled independently — a failure in one must not blank out the other's data.
+  const session = sessionResult.status === "fulfilled" ? sessionResult.value : null;
+  const organizations = organizationsResult.status === "fulfilled" ? organizationsResult.value : [];
 
   return (
     <Sidebar collapsible="icon" variant="inset" {...props}>
