@@ -1,8 +1,8 @@
-import { loadFilters } from "@/app/(dashboard)/categories/search-params";
 import { CategoryCard } from "@/features/categories/components/category-card";
 import { CategoryFilters } from "@/features/categories/components/category-filters";
 import { CategoryGridView } from "@/features/categories/components/category-grid-view";
 import { CategoryPagination } from "@/features/categories/components/category-pagination";
+import { loadFilters } from "@/features/categories/lib/search-params";
 import { categoryService } from "@/features/categories/services/category.service";
 
 export default async function Categories({ searchParams }: Readonly<PageProps<"/categories">>) {
