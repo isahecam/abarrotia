@@ -9,21 +9,26 @@ export default async function Categories({ searchParams }: Readonly<PageProps<"/
   const pagination = await loadFilters(searchParams);
   const [error, result] = await categoryService.getAll(pagination);
 
-  if (error) {
-    return <p className="text-sm text-muted-foreground">No se pudieron cargar las categorías.</p>;
-  }
-
   return (
     <section className="flex flex-col gap-6">
-      <CategoryFilters resultCount={result.pagination.total} />
+      <CategoryFilters resultCount={error ? 0 : result.pagination.total} />
 
-      <CategoryGridView>
-        {result.data.map((category) => (
-          <CategoryCard key={category.id} data={category} />
-        ))}
-      </CategoryGridView>
+      {error ? (
+        <p className="text-sm text-muted-foreground">No se pudieron cargar las categorías.</p>
+      ) : (
+        <>
+          <CategoryGridView>
+            {result.data.map((category) => (
+              <CategoryCard key={category.id} data={category} />
+            ))}
+          </CategoryGridView>
 
-      <CategoryPagination pagination={pagination} numPages={result?.pagination.totalPages} />
+          <CategoryPagination
+            pagination={{ ...pagination, page: result.pagination.page }}
+            numPages={result.pagination.totalPages}
+          />
+        </>
+      )}
     </section>
   );
 }
