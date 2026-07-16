@@ -2,6 +2,7 @@
 
 import { IconCashRegister, IconCheck, IconSelector } from "@tabler/icons-react";
 import { Organization } from "better-auth/plugins";
+import Link from "next/link";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -29,7 +30,10 @@ export function OrgSwitcher({ organizations, activeOrganizationId }: Readonly<Pr
     return (
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton size="lg" className="data-open:bg-sidebar-accent data-open:text-sidebar-accent-foreground">
+          <SidebarMenuButton
+            size="lg"
+            className="data-open:bg-sidebar-accent data-open:text-sidebar-accent-foreground"
+            render={<Link href="/checkout" />}>
             <Avatar className="h-8 w-8 rounded-lg">
               {activeOrganization?.logo ? (
                 <AvatarImage src={activeOrganization.logo} alt={activeOrganization.name} />
