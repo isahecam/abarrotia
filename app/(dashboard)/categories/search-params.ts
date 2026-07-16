@@ -1,7 +1,8 @@
 import { useQueryStates } from "nuqs";
-import { createLoader, createSerializer, inferParserType, parseAsInteger } from "nuqs/server";
+import { createLoader, createSerializer, inferParserType, parseAsInteger, parseAsString } from "nuqs/server";
 
 const searchParams = {
+  search: parseAsString.withDefault(""),
   page: parseAsInteger.withDefault(1),
   pageSize: parseAsInteger.withDefault(10),
 };
