@@ -18,5 +18,7 @@ export function mapBetterAuthError(error: APIError): OrganizationError {
     return { reason: CODE_TO_REASON[code as keyof typeof CODE_TO_REASON] };
   }
 
+  if (error.statusCode === 429) return { reason: "TOO_MANY_REQUESTS" };
+
   return { reason: "UNEXPECTED_ERROR" };
 }
