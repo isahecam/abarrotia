@@ -1,8 +1,8 @@
 import { asc, count, sql } from "drizzle-orm";
 
-import { SearchParams } from "@/app/(dashboard)/categories/search-params";
 import { db } from "@/db";
 import { categories } from "@/db/schemas";
+import { SearchParams } from "@/features/categories/lib/search-params";
 import { Category, CategoryRepository, NewCategory } from "@/features/categories/types/category.types";
 import { withPagination } from "@/lib/db/drizzle/pagination";
 import { postgresErrorMapper } from "@/lib/errors/postgres-error-mapper";
