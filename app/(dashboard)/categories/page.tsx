@@ -1,5 +1,6 @@
 import { loadFilters } from "@/app/(dashboard)/categories/search-params";
 import { CategoryCard } from "@/features/categories/components/category-card";
+import { CategoryFilters } from "@/features/categories/components/category-filters";
 import { CategoryGridView } from "@/features/categories/components/category-grid-view";
 import { CategoryPagination } from "@/features/categories/components/category-pagination";
 import { categoryService } from "@/features/categories/services/category.service";
@@ -13,7 +14,9 @@ export default async function Categories({ searchParams }: Readonly<PageProps<"/
   }
 
   return (
-    <>
+    <section className="flex flex-col gap-6">
+      <CategoryFilters />
+
       <CategoryGridView>
         {result.data.map((category) => (
           <CategoryCard key={category.id} data={category} />
@@ -21,6 +24,6 @@ export default async function Categories({ searchParams }: Readonly<PageProps<"/
       </CategoryGridView>
 
       <CategoryPagination pagination={pagination} numPages={result?.pagination.totalPages} />
-    </>
+    </section>
   );
 }
