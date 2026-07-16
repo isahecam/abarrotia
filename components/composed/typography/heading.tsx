@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { cn } from "@/lib/utils";
 
 interface Props extends React.HTMLAttributes<HTMLHeadingElement> {
   children: React.ReactNode;
@@ -18,7 +18,7 @@ export function Heading({ children, level = 1, className, ...props }: Readonly<P
   } satisfies Record<number, string>;
 
   return (
-    <Tag className={clsx("tracking-tight text-balance", sizeMap[level], className)} {...props}>
+    <Tag className={cn("tracking-tight text-balance", sizeMap[level], className)} {...props}>
       {children}
     </Tag>
   );
