@@ -1,5 +1,5 @@
-import { SearchParams } from "@/app/(dashboard)/categories/search-params";
 import { categories } from "@/db/schemas";
+import { SearchParams } from "@/features/categories/lib/search-params";
 import { RepositoryError } from "@/lib/errors/repository-error";
 import { Result } from "@/lib/errors/result";
 import { PaginatedResult } from "@/types/pagination";
