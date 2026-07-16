@@ -24,18 +24,24 @@ class CategoryService {
     return ok(category);
   }
 
-  async getAll({ page, pageSize }: SearchParams): Promise<Result<CategoryError, PaginatedResponse<CategorySelect>>> {
-    const [error, result] = await this.repository.getAll({ page, pageSize });
+  async getAll({
+    search,
+    page,
+    pageSize,
+  }: SearchParams): Promise<Result<CategoryError, PaginatedResponse<CategorySelect>>> {
+    const safePageSize = Math.max(1, pageSize);
+
+    const [error, result] = await this.repository.getAll({ search, page, pageSize: safePageSize });
 
     if (error) return err(categoryErrorMapper(error.reason));
 
-    const totalPages = Math.ceil(result.total / pageSize);
+    const totalPages = Math.ceil(result.total / safePageSize);
 
     return ok({
       data: result.data,
       pagination: {
         page,
-        pageSize,
+        pageSize: safePageSize,
         total: result.total,
         totalPages,
       },
