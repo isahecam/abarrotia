@@ -23,7 +23,7 @@ export function CreateCategoryModal() {
   const formId = useId();
   const [open, setOpen] = useState(false);
 
-  const { onSubmit, isPending, ...methods } = useCreateCategory();
+  const { onSubmit, isPending, ...methods } = useCreateCategory({ onSuccess: () => setOpen(false) });
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
