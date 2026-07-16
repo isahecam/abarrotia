@@ -9,7 +9,7 @@ import { createCategory } from "@/features/categories/actions/category.actions";
 import { Category, categorySchema } from "@/features/categories/schemas/category.schema";
 import { appToast } from "@/lib/toast";
 
-export const useCreateCategory = () => {
+export const useCreateCategory = ({ onSuccess }: { onSuccess?: () => void }) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -31,6 +31,7 @@ export const useCreateCategory = () => {
       appToast.action(result);
       methods.reset();
       router.refresh();
+      onSuccess?.();
     });
   };
 
