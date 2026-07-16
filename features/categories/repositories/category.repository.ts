@@ -25,9 +25,12 @@ class DrizzleCategoryRepository implements CategoryRepository {
       const condition = search ? sql`${categories.search} @@ websearch_to_tsquery('spanish', ${search})` : undefined;
 
       const query = db.select().from(categories).where(condition);
-      const result = await withPagination(query.$dynamic(), asc(categories.createdAt), page, pageSize);
+      const countQuery = db.select({ total: count() }).from(categories).where(condition);
 
-      const [{ total }] = await db.select({ total: count() }).from(categories).where(condition);
+      const [result, [{ total }]] = await Promise.all([
+        withPagination(query.$dynamic(), asc(categories.createdAt), page, pageSize),
+        countQuery,
+      ]);
 
       return ok({ data: result, total });
     } catch (error) {
