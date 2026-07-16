@@ -1,4 +1,4 @@
-import { asc, count } from "drizzle-orm";
+import { asc, count, sql } from "drizzle-orm";
 
 import { SearchParams } from "@/app/(dashboard)/categories/search-params";
 import { db } from "@/db";
@@ -20,16 +20,14 @@ class DrizzleCategoryRepository implements CategoryRepository {
     }
   }
 
-  async getAll({ page, pageSize }: SearchParams): Promise<Result<RepositoryError, PaginatedResult<Category>>> {
+  async getAll({ search, page, pageSize }: SearchParams): Promise<Result<RepositoryError, PaginatedResult<Category>>> {
     try {
-      const query = db.select().from(categories);
+      const condition = search ? sql`${categories.search} @@ websearch_to_tsquery('spanish', ${search})` : undefined;
+
+      const query = db.select().from(categories).where(condition);
       const result = await withPagination(query.$dynamic(), asc(categories.createdAt), page, pageSize);
 
-      const [{ total }] = await db
-        .select({
-          total: count(),
-        })
-        .from(categories);
+      const [{ total }] = await db.select({ total: count() }).from(categories).where(condition);
 
       return ok({ data: result, total });
     } catch (error) {
