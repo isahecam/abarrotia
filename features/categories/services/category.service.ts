@@ -29,9 +29,10 @@ class CategoryService {
     page,
     pageSize,
   }: SearchParams): Promise<Result<CategoryError, PaginatedResponse<CategorySelect>>> {
+    const safePage = Math.max(1, page);
     const safePageSize = Math.max(1, pageSize);
 
-    const [error, result] = await this.repository.getAll({ search, page, pageSize: safePageSize });
+    const [error, result] = await this.repository.getAll({ search, page: safePage, pageSize: safePageSize });
 
     if (error) return err(categoryErrorMapper(error.reason));
 
@@ -40,7 +41,7 @@ class CategoryService {
     return ok({
       data: result.data,
       pagination: {
-        page,
+        page: safePage,
         pageSize: safePageSize,
         total: result.total,
         totalPages,
