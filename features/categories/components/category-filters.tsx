@@ -3,9 +3,9 @@
 import { debounce } from "nuqs";
 import { useTransition } from "react";
 
-import { useFilters } from "@/app/(dashboard)/categories/search-params";
 import { SearchInput } from "@/components/composed/filters/search-input";
 import { Button } from "@/components/ui/button";
+import { useFilters } from "@/features/categories/lib/search-params";
 
 interface Props {
   resultCount: number;
