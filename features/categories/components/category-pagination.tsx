@@ -1,6 +1,5 @@
 import { Route } from "next";
 
-import { getPaginatedLink, SearchParams } from "@/app/(dashboard)/categories/search-params";
 import {
   Pagination,
   PaginationContent,
@@ -9,6 +8,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { getPaginatedLink, SearchParams } from "@/features/categories/lib/search-params";
 import { cn } from "@/lib/utils";
 
 interface Props {
