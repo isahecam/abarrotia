@@ -54,9 +54,8 @@ export function postgresErrorMapper(error: unknown): RepositoryError {
   const cause = unWrapDrizzleError(error);
 
   if (isPostgresError(cause) && cause.code) {
-    return {
-      reason: REPOSITORY_ERROR_REASONS[cause.code as keyof typeof REPOSITORY_ERROR_REASONS],
-    };
+    const reason = REPOSITORY_ERROR_REASONS[cause.code as keyof typeof REPOSITORY_ERROR_REASONS];
+    if (reason) return { reason };
   }
 
   return { reason: "UNEXPECTED_ERROR" };
