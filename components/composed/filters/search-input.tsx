@@ -1,22 +1,27 @@
 import { IconSearch } from "@tabler/icons-react";
 
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from "@/components/ui/input-group";
 import { Spinner } from "@/components/ui/spinner";
 
 interface Props extends React.ComponentProps<"input"> {
-  isLoading: boolean;
+  isLoading?: boolean;
+  resultCount?: number;
 }
 
-export function SearchInput({ isLoading = false, ...props }: Readonly<Props>) {
+export function SearchInput({ isLoading = false, resultCount, ...props }: Readonly<Props>) {
   return (
     <InputGroup>
       <InputGroupInput placeholder="Buscar..." {...props} />
       <InputGroupAddon>
         <IconSearch />
       </InputGroupAddon>
-      {isLoading && (
+      {(isLoading || resultCount !== undefined) && (
         <InputGroupAddon align="inline-end">
-          <Spinner />
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <InputGroupText>{resultCount === 1 ? "1 resultado" : `${resultCount} resultados`}</InputGroupText>
+          )}
         </InputGroupAddon>
       )}
     </InputGroup>
