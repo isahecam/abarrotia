@@ -29,7 +29,7 @@ export function CategoryFilters({ resultCount }: Readonly<Props>) {
         value={search}
         onChange={(e) => {
           setSearchParams(
-            { search: e.target.value },
+            { search: e.target.value, page: 1 },
             {
               limitUrlUpdates: e.target.value ? debounce(300) : undefined,
             },
