@@ -23,6 +23,9 @@ function pageURL(pagination: SearchParams, page: number) {
 export async function CategoryPagination({ numPages, pagination }: Readonly<Props>) {
   const { page } = pagination;
 
+  const isFirstPage = page <= 1;
+  const isLastPage = page >= numPages;
+
   return (
     <Pagination className="not-prose items-center gap-2">
       <PaginationContent>
@@ -30,7 +33,9 @@ export async function CategoryPagination({ numPages, pagination }: Readonly<Prop
           <PaginationPrevious
             text="Anterior"
             href={pageURL(pagination, page - 1) as Route}
-            className={cn(page === 1 && "pointer-events-none opacity-50")}
+            aria-disabled={isFirstPage}
+            tabIndex={isFirstPage ? -1 : undefined}
+            className={cn(isFirstPage && "pointer-events-none opacity-50")}
           />
         </PaginationItem>
         {Array.from({ length: numPages }, (_, i) => (
@@ -44,7 +49,9 @@ export async function CategoryPagination({ numPages, pagination }: Readonly<Prop
           <PaginationNext
             text="Siguiente"
             href={pageURL(pagination, page + 1) as Route}
-            className={cn(page === numPages && "pointer-events-none opacity-50")}
+            aria-disabled={isLastPage}
+            tabIndex={isLastPage ? -1 : undefined}
+            className={cn(isLastPage && "pointer-events-none opacity-50")}
           />
         </PaginationItem>
       </PaginationContent>
