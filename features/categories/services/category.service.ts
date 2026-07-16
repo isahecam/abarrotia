@@ -1,6 +1,6 @@
-import { SearchParams } from "@/app/(dashboard)/categories/search-params";
 import { CategoryError } from "@/features/categories/errors/category-error";
 import { categoryErrorMapper } from "@/features/categories/errors/category-error-mapper";
+import { SearchParams } from "@/features/categories/lib/search-params";
 import { categoryRepository } from "@/features/categories/repositories/category.repository";
 import { Category } from "@/features/categories/schemas/category.schema";
 import { CategoryRepository, Category as CategorySelect } from "@/features/categories/types/category.types";
