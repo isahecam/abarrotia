@@ -15,7 +15,7 @@ export default async function Categories({ searchParams }: Readonly<PageProps<"/
 
   return (
     <section className="flex flex-col gap-6">
-      <CategoryFilters />
+      <CategoryFilters resultCount={result.pagination.total} />
 
       <CategoryGridView>
         {result.data.map((category) => (
