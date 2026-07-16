@@ -27,4 +27,6 @@ const MAIN_NAV_ITEMS: NavItem[] = [
 
 const SECONDARY_NAV_ITEMS: NavItem[] = [{ title: "Ajustes", url: "#", icon: IconSettings }];
 
-export { MAIN_NAV_ITEMS, SECONDARY_NAV_ITEMS };
+const APP_TIMEZONE = "America/Mexico_City";
+
+export { APP_TIMEZONE, MAIN_NAV_ITEMS, SECONDARY_NAV_ITEMS };
