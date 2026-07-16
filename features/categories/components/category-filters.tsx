@@ -7,7 +7,11 @@ import { useFilters } from "@/app/(dashboard)/categories/search-params";
 import { SearchInput } from "@/components/composed/filters/search-input";
 import { Button } from "@/components/ui/button";
 
-export function CategoryFilters() {
+interface Props {
+  resultCount: number;
+}
+
+export function CategoryFilters({ resultCount }: Readonly<Props>) {
   const [isPending, startTransition] = useTransition();
 
   const [{ search }, setSearchParams] = useFilters({
@@ -32,9 +36,10 @@ export function CategoryFilters() {
           );
         }}
         isLoading={isPending}
+        resultCount={search ? resultCount : undefined}
       />
 
-      <Button variant="secondary" onClick={onClear}>
+      <Button variant="secondary" onClick={onClear} disabled={!search}>
         Limpiar
       </Button>
     </div>
