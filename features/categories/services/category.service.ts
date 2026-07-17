@@ -48,6 +48,18 @@ class CategoryService {
       },
     });
   }
+
+  async delete(input: string): Promise<Result<CategoryError, void>> {
+    const [error] = await this.repository.getById(input);
+
+    if (error) return err(categoryErrorMapper(error.reason));
+
+    const [deleteError] = await this.repository.delete(input);
+
+    if (deleteError) return err(categoryErrorMapper(deleteError.reason));
+
+    return ok(undefined);
+  }
 }
 
 export const categoryService = new CategoryService(categoryRepository, slugify);
