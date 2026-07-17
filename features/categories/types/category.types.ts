@@ -10,4 +10,6 @@ export type NewCategory = typeof categories.$inferInsert;
 export interface CategoryRepository {
   create(category: NewCategory): Promise<Result<RepositoryError, Category>>;
   getAll({ search, page, pageSize }: SearchParams): Promise<Result<RepositoryError, PaginatedResult<Category>>>;
+  getById(id: string): Promise<Result<RepositoryError, Category | null>>;
+  delete(id: string): Promise<Result<RepositoryError, void>>;
 }
