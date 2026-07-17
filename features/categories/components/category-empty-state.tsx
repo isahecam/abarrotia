@@ -17,7 +17,10 @@ export function CategoryEmptyState({ search }: Readonly<Props>) {
             <IconSearchOff />
           </EmptyMedia>
           <EmptyTitle>No se encontraron categorías</EmptyTitle>
-          <EmptyDescription>No encontramos categorías que coincidan con &quot;{search}&quot;.</EmptyDescription>
+          <EmptyDescription>
+            No encontramos categorías que coincidan con &quot;{search}&quot;. Intenta con otro nombre o ajusta los
+            términos de búsqueda.
+          </EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
           <Link href="/categories" className={buttonVariants({ variant: "secondary", size: "sm" })}>
