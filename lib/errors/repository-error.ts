@@ -1,5 +1,10 @@
 /* Mapa de razones de error de repositorio */
-export const REPOSITORY_ERROR_REASONS = ["DUPLICATE_ENTRY", "CONNECTION_ERROR", "UNEXPECTED_ERROR"] as const;
+export const REPOSITORY_ERROR_REASONS = [
+  "DUPLICATE_ENTRY",
+  "CONNECTION_ERROR",
+  "NOT_FOUND",
+  "UNEXPECTED_ERROR",
+] as const;
 
 export type RepositoryErrorReason = (typeof REPOSITORY_ERROR_REASONS)[number];
 
