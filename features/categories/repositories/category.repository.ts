@@ -1,4 +1,4 @@
-import { asc, count, sql } from "drizzle-orm";
+import { asc, count, eq, sql } from "drizzle-orm";
 
 import { db } from "@/db";
 import { categories } from "@/db/schemas";
@@ -33,6 +33,27 @@ class DrizzleCategoryRepository implements CategoryRepository {
       ]);
 
       return ok({ data: result, total });
+    } catch (error) {
+      return err(postgresErrorMapper(error));
+    }
+  }
+
+  async getById(id: string): Promise<Result<RepositoryError, Category | null>> {
+    try {
+      const [result] = await db.select().from(categories).where(eq(categories.id, id));
+      return ok(result);
+    } catch (error) {
+      return err(postgresErrorMapper(error));
+    }
+  }
+
+  async delete(id: string): Promise<Result<RepositoryError, void>> {
+    try {
+      const [result] = await db.delete(categories).where(eq(categories.id, id)).returning({ id: categories.id });
+
+      if (!result) return err({ reason: "NOT_FOUND" });
+
+      return ok(undefined);
     } catch (error) {
       return err(postgresErrorMapper(error));
     }
