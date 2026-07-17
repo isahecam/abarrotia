@@ -3,6 +3,7 @@ import { RepositoryErrorReason } from "@/lib/errors/repository-error";
 
 const CODE_TO_REASON = {
   DUPLICATE_ENTRY: "CATEGORY_ALREADY_EXISTS",
+  NOT_FOUND: "CATEGORY_NOT_FOUND",
 } satisfies Partial<Record<RepositoryErrorReason, CategoryErrorReason>>;
 
 export function categoryErrorMapper(error: RepositoryErrorReason): CategoryError {
