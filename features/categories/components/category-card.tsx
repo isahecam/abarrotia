@@ -1,22 +1,14 @@
 "use client";
 
-import { IconDotsVertical, IconEdit, IconTrash } from "@tabler/icons-react";
-
-import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardAction } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
+import { DeleteCategoryDialog } from "@/features/categories/components/delete-category-dialog";
 import { Category } from "@/features/categories/types/category.types";
 
 interface CategoryCardProps {
   data: Category;
 }
 
-export function CategoryCard({ data }: Readonly<CategoryCardProps>) {
+export function CategoryCard({ data: category }: Readonly<CategoryCardProps>) {
   return (
     <Card size="sm" className="shadow-none">
       <CardHeader>
@@ -24,30 +16,12 @@ export function CategoryCard({ data }: Readonly<CategoryCardProps>) {
           <span
             aria-hidden
             className="block size-3 shrink-0 rounded-full"
-            style={{ backgroundColor: data.color ?? undefined }}
+            style={{ backgroundColor: category.color ?? undefined }}
           />
-          {data.name}
+          {category.name}
         </CardTitle>
         <CardAction>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button size="icon-xs" variant="outline">
-                  <IconDotsVertical />
-                </Button>
-              }
-            />
-            <DropdownMenuContent className="w-40" align="start">
-              <DropdownMenuItem>
-                <IconEdit />
-                Editar
-              </DropdownMenuItem>
-              <DropdownMenuItem variant="destructive">
-                <IconTrash />
-                Eliminar
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <DeleteCategoryDialog data={category} />
         </CardAction>
       </CardHeader>
     </Card>
