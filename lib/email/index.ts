@@ -1,8 +1,17 @@
-import { resend } from "@/lib/resend";
+import { Resend } from "resend";
 
 import { EmailService } from "./email.service";
 import { ResendProvider } from "./providers/resend.provider";
 
-const provider = new ResendProvider(resend);
+let emailService: EmailService | null = null;
 
-export const emailService = new EmailService(provider);
+export function getEmailService() {
+  if (!emailService) {
+    const client = new Resend(process.env.RESEND_API_KEY!);
+    const provider = new ResendProvider(client);
+
+    emailService = new EmailService(provider);
+  }
+
+  return emailService;
+}

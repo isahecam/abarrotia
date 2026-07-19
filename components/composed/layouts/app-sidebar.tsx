@@ -1,89 +1,32 @@
-"use client";
-
-import { IconCash, IconChartBar, IconPackage, IconPackages, IconReceipt, IconSettings } from "@tabler/icons-react";
-import Link from "next/link";
 import * as React from "react";
 
-import { AbarrotiaLogo } from "@/components/composed/layouts/abarrotia-logo";
 import { MainNav } from "@/components/composed/layouts/main-nav";
+import { OrgSwitcher } from "@/components/composed/layouts/org-switcher";
 import { SecondaryNav } from "@/components/composed/layouts/secondary-nav";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader } from "@/components/ui/sidebar";
 import { UserNav } from "@/features/profile/components/user-nav";
+import { getOrganizations } from "@/lib/organization";
+import { getCurrentSession } from "@/lib/session";
 
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  navMain: [
-    {
-      title: "Cobro",
-      url: "/checkout",
-      icon: IconCash,
-    },
-    {
-      title: "Productos",
-      url: "/products",
-      icon: IconPackage,
-    },
-    {
-      title: "Inventario",
-      url: "#",
-      icon: IconPackages,
-    },
-    {
-      title: "Ventas",
-      url: "#",
-      icon: IconChartBar,
-    },
-    {
-      title: "Corte de caja",
-      url: "#",
-      icon: IconReceipt,
-    },
-  ],
+export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const [sessionResult, organizationsResult] = await Promise.allSettled([getCurrentSession(), getOrganizations()]);
 
-  navSecondary: [
-    {
-      title: "Ajustes",
-      url: "/settings",
-      icon: IconSettings,
-    },
-  ],
-};
+  // AppSidebar renders on every dashboard route with no error boundary above it, so each
+  // call is settled independently — a failure in one must not blank out the other's data.
+  const session = sessionResult.status === "fulfilled" ? sessionResult.value : null;
+  const organizations = organizationsResult.status === "fulfilled" ? organizationsResult.value : [];
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" variant="inset" {...props}>
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              size="lg"
-              className="data-open:bg-sidebar-accent data-open:text-sidebar-accent-foreground"
-              render={
-                <Link href="/checkout">
-                  <AbarrotiaLogo />
-                </Link>
-              }></SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <OrgSwitcher organizations={organizations} activeOrganizationId={session?.session.activeOrganizationId} />
       </SidebarHeader>
       <SidebarContent>
-        <MainNav items={data.navMain} />
-        <SecondaryNav items={data.navSecondary} className="mt-auto" />
+        <MainNav />
+        <SecondaryNav className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <UserNav user={data.user} />
+        <UserNav user={session?.user} />
       </SidebarFooter>
     </Sidebar>
   );

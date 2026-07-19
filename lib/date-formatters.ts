@@ -1,5 +1,7 @@
+import { APP_TIMEZONE } from "@/lib/constants";
+
 const createDateFormatter = (options: Intl.DateTimeFormatOptions, locale: string) => {
-  return new Intl.DateTimeFormat(locale, options);
+  return new Intl.DateTimeFormat(locale, { ...options, timeZone: APP_TIMEZONE });
 };
 
 const fullDateFormatter = (locale: string) => createDateFormatter({ dateStyle: "full" }, locale);

@@ -1,6 +1,7 @@
 "use client";
 
 import { IconDotsVertical } from "@tabler/icons-react";
+import { User } from "better-auth";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -11,16 +12,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { useSignOut } from "@/features/auth/hooks/use-sign-out";
 
-export function UserNav({
-  user,
-}: Readonly<{
-  user: {
-    name: string;
-    email: string;
-    avatar: string;
-  };
-}>) {
+interface Props {
+  user?: User;
+}
+
+export function UserNav({ user }: Readonly<Props>) {
+  const { onSignOut, isPending } = useSignOut();
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -33,18 +33,23 @@ export function UserNav({
               />
             }>
             <Avatar className="h-8 w-8 rounded-lg grayscale">
-              <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+              {user?.image ? (
+                <AvatarImage src={user.image} alt={user.name} />
+              ) : (
+                <AvatarFallback className="rounded-lg">BH</AvatarFallback>
+              )}
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-medium">{user.name}</span>
-              <span className="truncate text-xs text-muted-foreground">{user.email}</span>
+              <span className="truncate font-medium">{user?.name}</span>
+              <span className="truncate text-xs text-muted-foreground">{user?.email}</span>
             </div>
             <IconDotsVertical className="ml-auto size-4" />
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuGroup>
-              <DropdownMenuItem>Cerrar sesión</DropdownMenuItem>
+              <DropdownMenuItem onClick={onSignOut} disabled={isPending}>
+                Cerrar sesión
+              </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
