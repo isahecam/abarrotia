@@ -4,16 +4,16 @@ import { z } from "zod";
 
 import { CATEGORY_ERROR_MESSAGES } from "@/features/categories/errors/messages";
 import {
-  Category,
-  CategoryIdentifier,
-  categoryIdentifierSchema,
-  categorySchema,
+  CreateCategory,
+  createCategorySchema,
+  DeleteCategory,
+  deleteCategorySchema,
 } from "@/features/categories/schemas/category.schema";
 import { categoryService } from "@/features/categories/services/category.service";
 import { ActionResult } from "@/lib/errors/action-result";
 
-export async function createCategory(input: Category): Promise<ActionResult> {
-  const parsed = categorySchema.safeParse(input);
+export async function createCategory(input: CreateCategory): Promise<ActionResult> {
+  const parsed = createCategorySchema.safeParse(input);
 
   if (!parsed.success)
     return {
@@ -35,12 +35,12 @@ export async function createCategory(input: Category): Promise<ActionResult> {
   return { success: true, data: undefined, message: "Categoría creada exitosamente" };
 }
 
-export async function deleteCategory(input: CategoryIdentifier): Promise<ActionResult> {
-  const parsed = categoryIdentifierSchema.safeParse(input);
+export async function deleteCategory(input: DeleteCategory): Promise<ActionResult> {
+  const parsed = deleteCategorySchema.safeParse(input);
 
   if (!parsed.success) return { success: false, reason: "VALIDATION_ERROR", message: "Categoría inválida" };
 
-  const [error] = await categoryService.delete(parsed.data.id);
+  const [error] = await categoryService.delete(parsed.data);
 
   if (error)
     return {
