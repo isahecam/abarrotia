@@ -13,10 +13,10 @@ export function CategoryCard({ data: category }: Readonly<CategoryCardProps>) {
   return (
     <Card size="sm" className="shadow-none">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="row-span-2 flex items-center gap-2">
           <span
             aria-hidden
-            className="block size-3 shrink-0 rounded-full"
+            className="mt-1.25 block size-3 shrink-0 self-start rounded-full"
             style={{ backgroundColor: category.color ?? undefined }}
           />
           {category.name}
