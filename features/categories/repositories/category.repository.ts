@@ -20,6 +20,18 @@ class DrizzleCategoryRepository implements CategoryRepository {
     }
   }
 
+  async update(id: string, category: Partial<NewCategory>): Promise<Result<RepositoryError, Category>> {
+    try {
+      const [result] = await db.update(categories).set(category).where(eq(categories.id, id)).returning();
+
+      if (!result) return err({ reason: "NOT_FOUND" });
+
+      return ok(result);
+    } catch (error) {
+      return err(postgresErrorMapper(error));
+    }
+  }
+
   async getAll({ search, page, pageSize }: SearchParams): Promise<Result<RepositoryError, PaginatedResult<Category>>> {
     try {
       const condition = search ? sql`${categories.search} @@ websearch_to_tsquery('spanish', ${search})` : undefined;
