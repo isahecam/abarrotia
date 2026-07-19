@@ -5,10 +5,10 @@ import { Controller, useFormContext } from "react-hook-form";
 import { ColorPicker } from "@/components/ui/color-picker";
 import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Category } from "@/features/categories/schemas/category.schema";
+import { CategoryFormValues } from "@/features/categories/schemas/category.schema";
 
 export function CategoryForm() {
-  const { control } = useFormContext<Category>();
+  const { control } = useFormContext<CategoryFormValues>();
 
   return (
     <FieldGroup>
