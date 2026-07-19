@@ -37,19 +37,19 @@ export function CreateCategoryModal() {
           <Form id={formId} onSubmit={methods.handleSubmit(onSubmit)}>
             <CategoryForm />
           </Form>
+          <DialogFooter>
+            <SubmitButton form={formId} disabled={isPending}>
+              {isPending ? (
+                <>
+                  <Spinner />
+                  Creando...
+                </>
+              ) : (
+                "Crear categoría"
+              )}
+            </SubmitButton>
+          </DialogFooter>
         </FormProvider>
-        <DialogFooter>
-          <SubmitButton form={formId} disabled={isPending}>
-            {isPending ? (
-              <>
-                <Spinner />
-                Creando...
-              </>
-            ) : (
-              "Crear categoría"
-            )}
-          </SubmitButton>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
