@@ -2,6 +2,7 @@
 
 import { Card, CardHeader, CardTitle, CardAction } from "@/components/ui/card";
 import { DeleteCategoryDialog } from "@/features/categories/components/delete-category-dialog";
+import { UpdateCategoryModal } from "@/features/categories/components/update-category-modal";
 import { Category } from "@/features/categories/types/category.types";
 
 interface CategoryCardProps {
@@ -21,6 +22,7 @@ export function CategoryCard({ data: category }: Readonly<CategoryCardProps>) {
           {category.name}
         </CardTitle>
         <CardAction>
+          <UpdateCategoryModal data={category} />
           <DeleteCategoryDialog data={category} />
         </CardAction>
       </CardHeader>
