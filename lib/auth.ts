@@ -4,7 +4,7 @@ import { nextCookies } from "better-auth/next-js";
 import { organization } from "better-auth/plugins";
 
 import { db } from "@/db"; // Drizzle instance
-import { emailService } from "@/lib/email";
+import { getEmailService } from "@/lib/email";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -15,14 +15,14 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: true,
     sendResetPassword: async ({ user: { name, email }, url }) => {
-      await emailService.sendPasswordResetEmail(name, email, url);
+      await getEmailService().sendPasswordResetEmail(name, email, url);
     },
   },
   emailVerification: {
     sendOnSignIn: true,
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ url, user: { name, email } }) => {
-      await emailService.sendVerificationEmail(name, email, url);
+      await getEmailService().sendVerificationEmail(name, email, url);
     },
   },
   plugins: [

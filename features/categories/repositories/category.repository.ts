@@ -1,0 +1,75 @@
+import { asc, count, eq, sql } from "drizzle-orm";
+
+import { db } from "@/db";
+import { categories } from "@/db/schemas";
+import { SearchParams } from "@/features/categories/lib/search-params";
+import { Category, CategoryRepository, NewCategory } from "@/features/categories/types/category.types";
+import { withPagination } from "@/lib/db/drizzle/pagination";
+import { postgresErrorMapper } from "@/lib/errors/postgres-error-mapper";
+import { RepositoryError } from "@/lib/errors/repository-error";
+import { err, ok, Result } from "@/lib/errors/result";
+import { PaginatedResult } from "@/types/pagination";
+
+class DrizzleCategoryRepository implements CategoryRepository {
+  async create(category: NewCategory): Promise<Result<RepositoryError, Category>> {
+    try {
+      const [result] = await db.insert(categories).values(category).returning();
+      return ok(result);
+    } catch (error) {
+      return err(postgresErrorMapper(error));
+    }
+  }
+
+  async update(id: string, category: Partial<NewCategory>): Promise<Result<RepositoryError, Category>> {
+    try {
+      const [result] = await db.update(categories).set(category).where(eq(categories.id, id)).returning();
+
+      if (!result) return err({ reason: "NOT_FOUND" });
+
+      return ok(result);
+    } catch (error) {
+      return err(postgresErrorMapper(error));
+    }
+  }
+
+  async getAll({ search, page, pageSize }: SearchParams): Promise<Result<RepositoryError, PaginatedResult<Category>>> {
+    try {
+      const condition = search ? sql`${categories.search} @@ websearch_to_tsquery('spanish', ${search})` : undefined;
+
+      const query = db.select().from(categories).where(condition);
+      const countQuery = db.select({ total: count() }).from(categories).where(condition);
+
+      const [result, [{ total }]] = await Promise.all([
+        withPagination(query.$dynamic(), asc(categories.createdAt), page, pageSize),
+        countQuery,
+      ]);
+
+      return ok({ data: result, total });
+    } catch (error) {
+      return err(postgresErrorMapper(error));
+    }
+  }
+
+  async getById(id: string): Promise<Result<RepositoryError, Category | null>> {
+    try {
+      const [result] = await db.select().from(categories).where(eq(categories.id, id));
+      return ok(result);
+    } catch (error) {
+      return err(postgresErrorMapper(error));
+    }
+  }
+
+  async delete(id: string): Promise<Result<RepositoryError, void>> {
+    try {
+      const [result] = await db.delete(categories).where(eq(categories.id, id)).returning({ id: categories.id });
+
+      if (!result) return err({ reason: "NOT_FOUND" });
+
+      return ok(undefined);
+    } catch (error) {
+      return err(postgresErrorMapper(error));
+    }
+  }
+}
+
+export const categoryRepository = new DrizzleCategoryRepository();

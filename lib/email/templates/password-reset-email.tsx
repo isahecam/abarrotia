@@ -28,7 +28,7 @@ export default function PasswordResetEmail({ name, resetUrl, tokenExpiresIn }: R
 
   return (
     <Tailwind>
-      <Html>
+      <Html lang="es">
         <Head>
           <title>Restablece tu contraseña</title>
         </Head>

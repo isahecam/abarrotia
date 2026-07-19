@@ -28,7 +28,7 @@ export default function VerificationEmail({ name, verificationUrl, tokenExpiresI
 
   return (
     <Tailwind>
-      <Html>
+      <Html lang="es">
         <Head>
           <title>Bienvenido a Abarrotia, Tu Punto de Venta</title>
         </Head>

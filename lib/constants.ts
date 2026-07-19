@@ -1,6 +1,7 @@
 import {
   Icon,
   IconCash,
+  IconCategory,
   IconChartBar,
   IconPackage,
   IconPackages,
@@ -18,6 +19,7 @@ type NavItem = {
 const MAIN_NAV_ITEMS: NavItem[] = [
   { title: "Cobro", url: "/checkout", icon: IconCash },
   { title: "Productos", url: "#", icon: IconPackage },
+  { title: "Categorías", url: "/categories", icon: IconCategory },
   { title: "Inventario", url: "#", icon: IconPackages },
   { title: "Ventas", url: "#", icon: IconChartBar },
   { title: "Corte de caja", url: "#", icon: IconReceipt },
@@ -25,4 +27,6 @@ const MAIN_NAV_ITEMS: NavItem[] = [
 
 const SECONDARY_NAV_ITEMS: NavItem[] = [{ title: "Ajustes", url: "#", icon: IconSettings }];
 
-export { MAIN_NAV_ITEMS, SECONDARY_NAV_ITEMS };
+const APP_TIMEZONE = "America/Mexico_City";
+
+export { APP_TIMEZONE, MAIN_NAV_ITEMS, SECONDARY_NAV_ITEMS };
