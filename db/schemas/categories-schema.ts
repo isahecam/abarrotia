@@ -13,7 +13,7 @@ export const categories = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     name: text("name").notNull(),
     slug: text("slug").notNull().unique(),
-    color: varchar("color", { length: 7 }).default("#E0E0E0"),
+    color: varchar("color", { length: 7 }).notNull().default("#E0E0E0"),
     search: tsvector("search")
       .notNull()
       .generatedAlwaysAs((): SQL => sql`to_tsvector('spanish', ${categories.name})`),
