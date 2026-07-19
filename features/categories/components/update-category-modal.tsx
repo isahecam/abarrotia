@@ -17,6 +17,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Spinner } from "@/components/ui/spinner";
 import { CategoryForm } from "@/features/categories/components/category-form";
 import { useUpdateCategory } from "@/features/categories/hooks/use-update-category";
 import { Category } from "@/features/categories/types/category.types";
@@ -59,8 +60,23 @@ export function UpdateCategoryModal({ data }: Readonly<Props>) {
             <CategoryForm />
           </Form>
           <DialogFooter>
-            <DialogClose render={<Button variant="outline">Cancelar</Button>} />
-            <SubmitButton form={formId}>Actualizar categoría</SubmitButton>
+            <DialogClose
+              render={
+                <Button variant="outline" disabled={isPending}>
+                  Cancelar
+                </Button>
+              }
+            />
+            <SubmitButton form={formId} disabled={isPending}>
+              {isPending ? (
+                <>
+                  <Spinner />
+                  Actualizando...
+                </>
+              ) : (
+                "Actualizar categoría"
+              )}
+            </SubmitButton>
           </DialogFooter>
         </FormProvider>
       </DialogContent>
