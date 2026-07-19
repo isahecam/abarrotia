@@ -2,7 +2,7 @@ import { CategoryError } from "@/features/categories/errors/category-error";
 import { categoryErrorMapper } from "@/features/categories/errors/category-error-mapper";
 import { SearchParams } from "@/features/categories/lib/search-params";
 import { categoryRepository } from "@/features/categories/repositories/category.repository";
-import { CreateCategory, DeleteCategory } from "@/features/categories/schemas/category.schema";
+import { CreateCategory, DeleteCategory, UpdateCategory } from "@/features/categories/schemas/category.schema";
 import { CategoryRepository, Category as CategorySelect } from "@/features/categories/types/category.types";
 import { err, ok, Result } from "@/lib/errors/result";
 import { SlugGenerator, slugify } from "@/lib/slug";
@@ -18,6 +18,20 @@ class CategoryService {
     const slug = this.slugGenerator.generate(input.name);
 
     const [error, category] = await this.repository.create({ ...input, slug });
+
+    if (error) return err(categoryErrorMapper(error.reason));
+
+    return ok(category);
+  }
+
+  async update({ id, ...input }: UpdateCategory): Promise<Result<CategoryError, CategorySelect>> {
+    const [existsError] = await this.repository.getById(id);
+
+    if (existsError) return err(categoryErrorMapper(existsError.reason));
+
+    const slug = this.slugGenerator.generate(input.name);
+
+    const [error, category] = await this.repository.update(id, { ...input, slug });
 
     if (error) return err(categoryErrorMapper(error.reason));
 
